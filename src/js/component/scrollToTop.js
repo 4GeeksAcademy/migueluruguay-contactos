@@ -1,20 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
+// Importamos React y useEffect para manejar la funcionalidad de scroll
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-class ScrollToTop extends React.Component {
-	componentDidUpdate(prevProps) {
-		if (this.props.location !== prevProps.location) {
-			window.scrollTo(0, 0);
-		}
-	}
+// Componente para mover la vista hacia arriba al cambiar de página
+const ScrollToTop = () => {
+    const location = useLocation();
 
-	render() {
-		return this.props.children;
-	}
-}
+    useEffect(() => {
+        // Desplaza la página hacia el inicio cada vez que la ruta cambia
+        window.scrollTo(0, 0);
+    }, [location]);
+
+    return null;
+};
 
 export default ScrollToTop;
-ScrollToTop.propTypes = {
-	location: PropTypes.object,
-	children: PropTypes.any
-};

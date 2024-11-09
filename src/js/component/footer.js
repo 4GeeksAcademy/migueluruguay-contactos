@@ -1,10 +1,14 @@
-import React, { Component } from "react";
+// Importamos React para utilizar componentes
+import React from 'react';
 
-export const Footer = () => (
-	<footer className="footer mt-auto py-3 text-center">
-		<p>
-			Made with <i className="fa fa-heart text-danger" /> by{" "}
-			<a href="http://www.4geeksacademy.com">4Geeks Academy</a>
-		</p>
-	</footer>
-);
+// Función que devuelve el pie de página de la aplicación
+const Footer = () => {
+    return (
+        <footer>
+            {/* Texto informativo en el pie de página */}
+            <p>Aplicación de Contactos - 2024</p>
+        </footer>
+    );
+};
+
+export default Footer;

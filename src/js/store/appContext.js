@@ -1,48 +1,66 @@
-import React, { useState, useEffect } from "react";
-import getState from "./flux.js";
+import React from "react";
+import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { Context } from '../store/appContext'
 
-// Don't change, here is where we initialize our context, by default it's just going to be null.
-export const Context = React.createContext(null);
+const agregarcontactos = ({ contact }) => {
+    const { store, actions } = useContext(Context)
 
-// This function injects the global store to any view/component where you want to use it, we will inject the context to layout.js, you can see it here:
-// https://github.com/4GeeksAcademy/react-hello-webapp/blob/master/src/js/layout.js#L35
-const injectContext = PassedComponent => {
-	const StoreWrapper = props => {
-		//this will be passed as the contenxt value
-		const [state, setState] = useState(
-			getState({
-				getStore: () => state.store,
-				getActions: () => state.actions,
-				setStore: updatedStore =>
-					setState({
-						store: Object.assign(state.store, updatedStore),
-						actions: { ...state.actions }
-					})
-			})
-		);
+    const eliminarContacto = () => {
+        console.log(contact)
+        actions.deleteContact(contact.id);
+    };
 
-		useEffect(() => {
-			/**
-			 * EDIT THIS!
-			 * This function is the equivalent to "window.onLoad", it only runs once on the entire application lifetime
-			 * you should do your ajax requests or fetch api requests here. Do not use setState() to save data in the
-			 * store, instead use actions, like this:
-			 *
-			 * state.actions.loadSomeData(); <---- calling this function from the flux.js actions
-			 *
-			 **/
-		}, []);
+    return (
+        <li className="list-group-item d-flex justify-content-center">
+            <div className="d-flex align-items-center w-75">
+                <div className="col-md-3 d-flex justify-content-center">
+                    <img
+                        className="rounded-circle"
+                        src="https://picsum.photos/170/170/"
+                        alt="Contact"
 
-		// The initial value for the context is not null anymore, but the current state of this component,
-		// the context will now have a getStore, getActions and setStore functions available, because they were declared
-		// on the state of this component
-		return (
-			<Context.Provider value={state}>
-				<PassedComponent {...props} />
-			</Context.Provider>
-		);
-	};
-	return StoreWrapper;
-};
+                    />
+                </div>
+                <div className="col-md-6">
+                    <h5 className="card-title mb-1">{contact.name}</h5>
+                    <p className="card-text mb-1">{contact.address}</p>
+                    <p className="card-text mb-1">{contact.phone}</p>
+                    <p className="card-text mb-1">{contact.email}</p>
+                </div>
+                <div className="col-md-3 d-flex justify-content-end">
+                    <Link to={"/editContact/" + contact.id} className="btn btn-link p-0 me-3">
+                        <i className="fa fa-eraser"></i>
+                    </Link>
+                    {/* <button className="btn btn-link p-0" onClick={eliminarContacto}>
+                        <i className="fa fa-trash fa-lg"></i>
+                    </button> */}
+                    {/* <!-- Button trigger modal --> */}
+                    <button type="button" data-bs-toggle="modal" data-bs-target={"#delete-contact-" + contact.id} >
+                        <i className="fa fa-trash fa-lg"></i>
+                    </button>
 
-export default injectContext;
+                    {/* <!-- Modal --> */}
+                    <div className="modal fade" id={"delete-contact-" + contact.id} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h1 className="modal-title fs-5" id="exampleModalLabel">Are you sure?</h1>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div className="modal-body">
+                                    If you delete this thing the etire universe will go down!
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Oh no!</button>
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={eliminarContacto}>Yes baby!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    )
+}
+export default agregarcontacto
